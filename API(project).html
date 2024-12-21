@@ -1,0 +1,78 @@
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Random Harry Potter Spell</title> 
+            <style>
+                body {
+                    font-family: 'Arial', sans-serif;
+                    margin: 20px;
+                    text-align: center;
+                    background-image: url('https://i.pinimg.com/originals/81/d9/88/81d988adf40f1c8d2a41d7b97f652a03.gif'); 
+                    background-size: cover; 
+                    background-repeat: no-repeat; 
+                    background-position: center; 
+                }
+                button {
+                    background-color: #172ce7;
+                    color: white;
+                    padding: 10px 20px;
+                    border: none;
+                    cursor: pointer;
+                    font-size: 16px;
+                    border-radius: 5px;
+                }
+                button:hover {
+                    background-color: #ff0000;
+                }
+                #spell {
+                    margin-top: 20px;
+                    padding: 20px;
+                    background-color: rgb(245, 8, 79);
+                    border-radius: 10px;
+                    color: #f1eaea;
+                }
+                h1 {
+                    color: #f1eaea;
+                }
+            </style>
+        </head>
+        <body>
+            <h1>Random Harry Potter Spell</h1>
+            <button id="fetchSpellBtn">Get Random Spell</button>
+            <div id="spell">
+                <h2>Click the button to reveal a spell!</h2>
+            </div>
+
+            <script>
+                const API_URL = 'https://hp-api.onrender.com/api/spells';
+
+                document.getElementById('fetchSpellBtn').addEventListener('click', () => {
+                    fetch(API_URL)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            
+                            const randomSpell = data[Math.floor(Math.random() * data.length)];
+                            
+                            document.getElementById('spell').innerHTML = `
+                                <h2>${randomSpell.name}</h2>
+                                <p><strong>Type:</strong> ${randomSpell.type || 'Unknown'}</p>
+                                <p><strong>Description:</strong> ${randomSpell.description || 'No description available'}</p>
+                            `;
+                        })
+                        .catch(error => {
+                            document.getElementById('spell').innerHTML = `
+                                <h2>Error</h2>
+                                <p>${error.message}</p>
+                            `;
+                        });
+                });
+            </script>
+        </body>
+        </html>
